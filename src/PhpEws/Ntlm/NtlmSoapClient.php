@@ -61,8 +61,11 @@ class NtlmSoapClient extends \SoapClient
         curl_setopt($this->ch, CURLOPT_POST, true );
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, $request);
         curl_setopt($this->ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        curl_setopt($this->ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC | CURLAUTH_NTLM);
+        curl_setopt($this->ch, CURLOPT_HTTPAUTH, $this->http_auth);
         curl_setopt($this->ch, CURLOPT_USERPWD, $this->user.':'.$this->password);
+//        curl_setopt($this->ch, CURLOPT_VERBOSE, true);
+//        $fp = fopen(dirname(__FILE__).'/Ewslog.txt', 'w');
+//        curl_setopt($this->ch, CURLOPT_STDERR, $fp);
 
         $response = curl_exec($this->ch);
 
@@ -70,10 +73,13 @@ class NtlmSoapClient extends \SoapClient
         // If the response if false than there was an error and we should throw
         // an exception.
         if ($response === false) {
+          $response = curl_exec($this->ch);
+          if($response === false) {
             throw new EwsException(
               'Curl error: ' . curl_error($this->ch),
               curl_errno($this->ch)
             );
+          }
         }
 
         return $response;

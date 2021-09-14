@@ -106,6 +106,7 @@ class EwsConnection
      * @see EwsConnection::VERSION_2010_SP1
      */
     protected $version;
+    protected $http_auth;
 
     /**
      * Constructor for the \PhpEws\EwsConnection class
@@ -119,13 +120,15 @@ class EwsConnection
         $server = null,
         $username = null,
         $password = null,
-        $version = self::VERSION_2007
+        $version = self::VERSION_2007,
+        $http_auth = 9
     ) {
         // Set the object properties.
         $this->setServer($server);
         $this->setUsername($username);
         $this->setPassword($password);
         $this->setVersion($version);
+        $this->setHttpAuth($http_auth);
     }
 
     /**
@@ -200,6 +203,13 @@ class EwsConnection
         return true;
     }
 
+
+  public function setHttpAuth($http_auth)
+  {
+    $this->http_auth = $http_auth;
+
+    return true;
+  }
     /**
      * Function Description
      *
@@ -702,6 +712,7 @@ class EwsConnection
         $this->soap = new ExchangeSoapClient(
             dirname(__FILE__).'/wsdl/services.wsdl',
             array(
+                'http_auth' => $this->http_auth,
                 'user' => $this->username,
                 'password' => $this->password,
                 'version' => $this->version,

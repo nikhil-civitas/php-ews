@@ -25,6 +25,7 @@ class ExchangeSoapClient extends NtlmSoapClient
      * @var string
      */
     protected $password;
+    protected $http_auth;
 
     /**
      * Constructor
@@ -44,6 +45,7 @@ class ExchangeSoapClient extends NtlmSoapClient
         // Set the username and password properties.
         $this->user = $options['user'];
         $this->password = $options['password'];
+        $this->http_auth = $options['http_auth'];
 
         // If a version was set then add it to the headers.
         if (!empty($options['version'])) {
